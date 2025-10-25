@@ -17,4 +17,17 @@ const validate = (data) => {
   }
 };
 
-module.exports = { validate };
+const validateLogin = (data) => {
+  const mandatoryFields = ["emailId", "password"];
+  const isAllowed = mandatoryFields.every((k) => Object.keys(data).includes(k));
+
+  if (!isAllowed) {
+    throw new Error("Some Fields are Missing");
+  }
+
+  if (!validator.isEmail(data.emailId)) {
+    throw new Error("Invlaid Email");
+  }
+};
+
+module.exports = { validate, validateLogin };
