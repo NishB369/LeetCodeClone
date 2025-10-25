@@ -1,13 +1,13 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const redisClient = require("../config/redis");
+const { redisClient } = require("../config/redis");
 
 const userMiddleware = async (req, res, next) => {
   try {
     const { token } = req.cookies;
     if (!token) throw new Error("Token is not persent");
 
-    const payload = jwt.verify(token, process.env.JWT_KEY);
+    const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     const { _id } = payload;
 
