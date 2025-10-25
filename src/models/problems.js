@@ -10,16 +10,19 @@ const problemSchema = new Schema({
     type: String,
     required: true,
   },
+
   difficulty: {
     type: String,
     enum: ["easy", "medium", "hard"],
     required: true,
   },
+
   tags: {
     type: String,
     enum: ["array", "linkedList", "graph", "dp"],
     required: true,
   },
+
   visibleTestCases: [
     {
       input: {
@@ -57,6 +60,19 @@ const problemSchema = new Schema({
         required: true,
       },
       initialCode: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+
+  referenceSolutions: [
+    {
+      language: {
+        type: String,
+        required: true,
+      },
+      completeCode: {
         type: String,
         required: true,
       },
