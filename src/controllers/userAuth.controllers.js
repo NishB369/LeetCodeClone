@@ -11,6 +11,7 @@ const register = async (req, res) => {
     const { firstName, emailId, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     req.body.password = hashedPassword;
+    req.body.role = "user";
 
     const user = await User.create(req.body);
 
@@ -50,7 +51,7 @@ const login = async (req, res) => {
       throw new Error("Invalid Credntials!");
     }
     const token = jwt.sign(
-      { _id: user._id, emailId: emailId },
+      { _id: user._id, emailId: emailId, role: user.role },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
@@ -79,4 +80,24 @@ const logout = async (req, res) => {
   }
 };
 
-module.exports = { register, login, logout };
+const adminRegister = async (req, res) => {
+  try {
+    validate(req.body);
+    const { firstName, emailId, password } = req.body;
+
+    req.body.password = await bcrypt.hash(password, 10);
+
+    const user = await User.create(req.body);
+    const token = jwt.sign(
+      { _id: user._id, emailId: emailId, role: user.role },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: 60 * 60 }
+    );
+    res.cookie("token", token, { maxAge: 60 * 60 * 1000 });
+    res.status(201).send("User Registered Successfully");
+  } catch (err) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+module.exports = { register, login, logout, adminRegister };
