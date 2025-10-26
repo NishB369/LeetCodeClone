@@ -5,6 +5,7 @@ const main = require("./src/config/db.js");
 const { redisClient } = require("./src/config/redis.js");
 const cookieParser = require("cookie-parser");
 const { authRouter } = require("./src/routes/userAuth.routes.js");
+const { problemRouter } = require("./src/routes/problemCRUD.routes.js");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -32,6 +33,7 @@ const initialiseConnection = async () => {
 initialiseConnection();
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/problems", problemRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
