@@ -5,6 +5,8 @@ const {
   createProblem,
   updateProblem,
   deleteProblem,
+  getProblemById,
+  getAllProblems
 } = require("../controllers/problemsCrud.controllers.js");
 
 const problemRouter = express.Router();
@@ -15,8 +17,8 @@ problemRouter.patch("/update/:id", adminMiddleware, updateProblem);
 problemRouter.delete("/delete/:id", adminMiddleware, deleteProblem);
 
 // Open Routes
-// problemRouter.get("/problemById/:id", userMiddleware, getProblemById);
-// problemRouter.get("/getAllProblems", userMiddleware, getAllProblems);
+problemRouter.get("/problemById/:id", userMiddleware, getProblemById);
+problemRouter.get("/getAllProblems", userMiddleware, getAllProblems);
 // problemRouter.get(
 //   "/problemsSolvedByUser",
 //   userMiddleware,

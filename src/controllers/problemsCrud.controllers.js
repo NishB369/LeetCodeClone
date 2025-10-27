@@ -114,4 +114,41 @@ const deleteProblem = async (req, res) => {
   }
 };
 
-module.exports = { createProblem, updateProblem, deleteProblem };
+const getProblemById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (!id) {
+      return res.status(401).send("ID Field Not Passed");
+    }
+
+    const problem = await Problem.findById(id);
+    if (!problem) {
+      return res.status(404).send("Problem Not Found");
+    }
+
+    res.status(200).send(problem);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getAllProblems = async (req, res) => {
+  try {
+    const problems = await Problem.find({});
+    if (problems.length === 0) {
+      return res.status(404).send("Problems Not Found");
+    }
+
+    res.status(200).send(problems);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  createProblem,
+  updateProblem,
+  deleteProblem,
+  getProblemById,
+  getAllProblems,
+};
